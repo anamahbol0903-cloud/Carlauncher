@@ -1,0 +1,27 @@
+name: Build CarLauncher
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Décompresser le projet
+        run: |
+          for z in *.zip; do unzip -q "$z"; done
+          ls
+      - name: Compiler
+        working-directory: CarLauncher
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CarLauncher-apk
+          path: CarLauncher/app/build/outputs/apk/debug/*.apk
