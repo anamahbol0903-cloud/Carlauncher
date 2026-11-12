@@ -12,10 +12,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Décompresser le projet
+      - name: Décompresser le projet (le dernier zip par ordre alphabétique)
         run: |
-          for z in *.zip; do unzip -q "$z"; done
-          ls
+          Z=$(ls *.zip | sort | tail -n 1)
+          echo "Projet utilisé : $Z"
+          unzip -qo "$Z"
       - name: Compiler
         working-directory: CarLauncher
         run: |
